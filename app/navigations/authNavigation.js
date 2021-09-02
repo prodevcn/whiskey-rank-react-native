@@ -1,0 +1,20 @@
+import React from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import Login from '../screens/AuthScreen/Login';
+
+const Stack = createStackNavigator();
+
+const AuthNavigation = props => {
+  return (
+    <Stack.Navigator initialRouteName="login">
+      <Stack.Screen
+        name="login"
+        component={Login}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export default AuthNavigation;
