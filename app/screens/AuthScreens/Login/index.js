@@ -27,6 +27,8 @@ import {
 //   return errors;
 // };
 
+import Screen from '../../../layouts/Screen';
+
 const Login = props => {
   // const dispatch = useDispatch();
   // const {fetching, errorMessage} = useSelector(state => state.auth);
@@ -36,9 +38,9 @@ const Login = props => {
   // };
 
   return (
-    <View>
+    <Screen hasHeader title="Login">
       <Heading>Login</Heading>
-    </View>
+    </Screen>
   );
 };
 

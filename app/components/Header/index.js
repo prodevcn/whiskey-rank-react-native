@@ -41,8 +41,8 @@ const Header = props => {
         />
       )}
       <View>
-        <Heading size="lg" color="primary.500">
-          Scanner
+        <Heading size="md" color="primary.500">
+          Whiskey
         </Heading>
         <Heading size="xs" color="muted.400">
           {props.title}

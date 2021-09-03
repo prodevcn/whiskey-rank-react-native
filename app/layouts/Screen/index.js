@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   Alert,
@@ -12,15 +12,20 @@ import {
   Spinner,
   View,
 } from 'native-base';
-import {Platform} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 
 import Header from '../../components/Header';
 
 const Screen = props => {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    StatusBar.setHidden(true);
+  }, []);
+
   return (
     <NativeBaseProvider>
+      <StatusBar hidden={true} />
       <Box
         flex={1}
         w="100%"

@@ -8,6 +8,7 @@ import AuthNavigation from './authNavigation';
 import MainNavigation from './mainNavigation';
 
 import {checkAuth} from '../redux/actions/authAction';
+import LandingScreen from '../screens/LandingScreen';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +25,12 @@ const AppRoutes = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="landing">
+        <Stack.Screen
+          name="landing"
+          component={LandingScreen}
+          options={headerOption}
+        />
         {authenticated ? (
           <Stack.Screen
             name="main"
