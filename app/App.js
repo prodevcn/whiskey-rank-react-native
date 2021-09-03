@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
-// import {PlatformColor, StatusBar} from 'react-native';
+import {Platform, StatusBar} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import {NativeBaseProvider, View, Text} from 'native-base';
+import {NativeBaseProvider} from 'native-base';
 
 import store from './redux/store';
-// import AppNavigation from './routes';
+import AppNavigation from './navigations';
 
 const App = () => {
   useEffect(() => {
@@ -15,9 +15,8 @@ const App = () => {
   return (
     <Provider store={store}>
       <NativeBaseProvider>
-        <View>
-          <Text>App</Text>
-        </View>
+        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+        <AppNavigation />
       </NativeBaseProvider>
     </Provider>
   );

@@ -1,20 +1,20 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
-const BottomTab = createBottomTabNavigator();
+import Home from '../screens/MainScreens/Home';
+
+const Tab = createMaterialBottomTabNavigator();
 
 const MainNavigation = () => {
   return (
-    <BottomTab.Navigator
+    <Tab.Navigator
       initialRouteName="home"
       tabBarOptions={{
         activeTintColor: 'tomato',
         inactiveTintColor: '#ddd',
       }}>
-      <BottomTab.Screen />
-      <BottomTab.Screen />
-      <BottomTab.Screen />
-    </BottomTab.Navigator>
+      <Tab.Screen name="home" component={Home} />
+    </Tab.Navigator>
   );
 };
 
