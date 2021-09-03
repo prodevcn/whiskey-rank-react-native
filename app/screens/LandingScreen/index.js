@@ -52,7 +52,8 @@ const LandingScreen = props => {
           mt={20}
           alt="logo"
         />
-        <Box
+        <VStack
+          justifyContent="space-around"
           flex={1}
           mt={5}
           mb={10}
@@ -73,7 +74,7 @@ const LandingScreen = props => {
             source={require('../../../assets/images/bottles.png')}
             alt="logo"
           />
-        </Box>
+        </VStack>
       </Box>
     </NativeBaseProvider>
   );
