@@ -1,12 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   NativeBaseProvider,
-  Center,
   HStack,
   Pressable,
-  View,
   Text,
-  Button,
   VStack,
   Heading,
   Box,
@@ -15,6 +12,8 @@ import {
 import {StatusBar, StyleSheet, Dimensions} from 'react-native';
 
 import ChevronsRight from '../../../assets/images/svg/chevrons-right.svg';
+import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/core';
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -35,6 +34,16 @@ const config = {
 };
 
 const LandingScreen = props => {
+  const {authenticated} = useSelector(state => state.auth);
+  const navigation = useNavigation();
+  const doContinue = () => {
+    if (authenticated) {
+      navigation.navigate('main');
+    } else {
+      navigation.navigate('auth');
+    }
+  };
+
   useEffect(() => {
     StatusBar.setHidden(true);
   }, []);
@@ -74,7 +83,12 @@ const LandingScreen = props => {
           <Heading size="lg" color="white">
             WHISKEY RATING
           </Heading>
-          <Pressable variant="ghost" p={0}>
+          <Pressable
+            variant="ghost"
+            p={0}
+            onPress={() => {
+              doContinue();
+            }}>
             <HStack space={1} justifyContent="center" alignItems="center">
               <Text fontSize={14} color="primary.400">
                 Please tab to continue

@@ -14,7 +14,7 @@ const Stack = createStackNavigator();
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
-  const {authenticated} = useSelector(state => state.auth);
+  const {authenticated, firstVisited} = useSelector(state => state.auth);
   const headerOption = {
     headerShown: false,
   };

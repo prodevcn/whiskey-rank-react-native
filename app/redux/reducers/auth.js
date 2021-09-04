@@ -3,6 +3,7 @@ import {AUTH, LOGOUT} from '../../constants/actions';
 const INITIAL_STATE = {
   fetching: false,
   authenticated: false,
+  firstVisited: false,
   errorMessage: null,
 };
 
