@@ -2,14 +2,19 @@ import React, {useState, useEffect} from 'react';
 import {
   NativeBaseProvider,
   Center,
+  HStack,
+  Pressable,
   View,
   Text,
+  Button,
   VStack,
   Heading,
   Box,
   Image,
 } from 'native-base';
 import {StatusBar, StyleSheet, Dimensions} from 'react-native';
+
+import ChevronsRight from '../../../assets/images/svg/chevrons-right.svg';
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -69,6 +74,14 @@ const LandingScreen = props => {
           <Heading size="lg" color="white">
             WHISKEY RATING
           </Heading>
+          <Pressable variant="ghost" p={0}>
+            <HStack space={1} justifyContent="center" alignItems="center">
+              <Text fontSize={14} color="primary.400">
+                Please tab to continue
+              </Text>
+              <ChevronsRight with={14} height={14} color="#22d3ee" />
+            </HStack>
+          </Pressable>
           <Image
             style={styles.bottle_bg}
             source={require('../../../assets/images/bottles.png')}
