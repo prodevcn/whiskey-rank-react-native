@@ -19,24 +19,41 @@ export const checkAuth = () => async dispatch => {
     dispatch({type: AUTH.FAILURE});
   }
 };
+/** signup */
+export const signup = userData => async dispatch => {
+  dispatch({type: AUTH.REQUEST});
+};
 
 /** login */
 export const login = userData => async dispatch => {
   dispatch({type: AUTH.REQUEST, payload: ''});
   return CreateAxios().then(axios =>
     axios
-      .post('/user/signin', userData)
+      .post('/auth/login', userData)
       .then(async res => {
-        if (res?.data?.message) {
-          dispatch({type: AUTH.FAILURE, payload: res.data.message});
-        } else {
-          await AsyncStorage.setItem('token', res.data.accessToken);
-          await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
+        if (res?.message) {
+          dispatch({type: AUTH.FAILURE, payload: res.message});
+          setTimeout(() => {
+            dispatch({
+              type: AUTH.FAILURE,
+              payload: null,
+            });
+          }, 2000);
+        } else if (res?.data?.data) {
+          console.log(res.data);
+          await AsyncStorage.setItem('token', res.data.data.token);
+          await AsyncStorage.setItem(
+            'user',
+            JSON.stringify(res.data.data.user),
+          );
           dispatch({
             type: SET_USER,
-            payload: {user: res.data.user, token: res.data.accessToken},
+            payload: {
+              user: res.data.data.user,
+              token: res.data.data.token,
+            },
           });
-          dispatch({type: AUTH.SUCCESS, payload: ''});
+          dispatch({type: AUTH.SUCCESS});
         }
       })
       .catch(err => {

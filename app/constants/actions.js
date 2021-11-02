@@ -17,3 +17,6 @@ export const LOGOUT = 'LOGOUT';
 /** user actions */
 export const SET_USER = 'SET_USER';
 export const REMOVE_USER = 'REMOVE_USER';
+
+/** product actions */
+export const FETCH_PRODUCTS = createRequestTypes('FETCH_PRODUCTS');

@@ -1,1 +1,1 @@
-export const API_URL = 'http://alhinti.dyndns.org:5000';
+export const API_URL = 'http://18.219.115.104:8080/api';

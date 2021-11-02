@@ -4,10 +4,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import AuthNavigation from './authNavigation';
-import MainNavigation from './mainNavigation';
+import AuthNavigation from './AuthNavigation';
+import MainNavigation from './MainNavigation';
 
 import {checkAuth} from '../redux/actions/authAction';
+import {checkFirstVisit} from '../utils/index';
 import LandingScreen from '../screens/LandingScreen';
 
 const Stack = createStackNavigator();
@@ -25,12 +26,14 @@ const AppRoutes = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="landing">
-        <Stack.Screen
-          name="landing"
-          component={LandingScreen}
-          options={headerOption}
-        />
+      <Stack.Navigator>
+        {checkFirstVisit && (
+          <Stack.Screen
+            name="landing"
+            component={LandingScreen}
+            options={headerOption}
+          />
+        )}
         {authenticated ? (
           <Stack.Screen
             name="main"

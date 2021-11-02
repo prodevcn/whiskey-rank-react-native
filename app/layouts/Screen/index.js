@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {ImageBackground, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   Alert,
@@ -14,9 +15,30 @@ import {
 } from 'native-base';
 import {Platform, StatusBar} from 'react-native';
 
-import Header from '../../components/Header';
+import Header from '../../containers/Header';
 
-const Screen = props => {
+const config = {
+  dependencies: {
+    'linear-gradient': require('react-native-linear-gradient').default,
+  },
+};
+
+const Screen = ({
+  title,
+  hasLogo,
+  hasBackButton,
+  hasHeader,
+  hasScroll,
+  gradient,
+  fullScreen,
+  innerStyle,
+  isLoading,
+  errorMessage,
+  children,
+  onCamera,
+  backgroundImage,
+  headerBackgroundColor,
+}) => {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -24,51 +46,99 @@ const Screen = props => {
   }, []);
 
   return (
-    <NativeBaseProvider>
-      <StatusBar hidden={true} />
-      <Box
-        flex={1}
-        w="100%"
-        px={props.fullScreen ? '0%' : '5%'}
-        safeAreaTop={Platform.OS === 'ios' && !props.fullScreen ? 8 : 0}
-        style={props.innerStyle}>
-        {props.fullScreen && (
-          <Fab
-            placement="top-left"
-            onPress={() => {
-              navigation.goBack();
-            }}
-            icon={<ArrowBackIcon size={6} color="white" />}
-            size={10}
-          />
-        )}
-        {props.hasHeader && (
-          <Header
-            title={props.title}
-            hasLogo={props.hasLogo}
-            hasBackButton={props.hasBackButton}
-          />
-        )}
-        {props.hasScroll ? (
-          <ScrollView
-            _contentContainerStyle={props.innerStyle}
-            mb={10}
-            showsVerticalScrollIndicator={false}>
-            {props.children}
-          </ScrollView>
-        ) : (
-          <View flex={1}>{props.children}</View>
-        )}
-      </Box>
-      {props.errorMessage !== null && props.errorMessage !== undefined && (
+    <NativeBaseProvider config={config}>
+      {backgroundImage ? (
+        <ImageBackground
+          resizeMode="cover"
+          style={styles.image}
+          source={require('../../../assets/images/bg.jpg')}>
+          {hasHeader && (
+            <Header
+              title={title}
+              hasLogo={hasLogo}
+              hasBackButton={hasBackButton}
+              headerBackgroundColor={headerBackgroundColor}
+            />
+          )}
+          <Box
+            flex={1}
+            w="100%"
+            px={fullScreen || onCamera ? '0%' : '5%'}
+            style={innerStyle}
+            safeAreaTop={Platform.OS === 'ios' && !fullScreen ? 8 : 0}>
+            {onCamera && (
+              <Fab
+                placement="top-left"
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                icon={<ArrowBackIcon size={6} color="white" />}
+                size={10}
+              />
+            )}
+            {hasScroll ? (
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {children}
+              </ScrollView>
+            ) : (
+              <View flex={1}>{children}</View>
+            )}
+          </Box>
+        </ImageBackground>
+      ) : (
+        <Box
+          flex={1}
+          w="100%"
+          bg={
+            gradient && {
+              linearGradient: {
+                colors: ['orange.400', 'amber.300'],
+                start: [0, 0],
+                end: [0, 1],
+              },
+            }
+          }
+          style={innerStyle}
+          safeAreaTop={Platform.OS === 'ios' && !fullScreen ? 8 : 0}>
+          {hasHeader && (
+            <Header
+              title={title}
+              hasLogo={hasLogo}
+              headerBackgroundColor={headerBackgroundColor}
+              hasBackButton={hasBackButton}
+            />
+          )}
+          <Box flex={1} px={fullScreen || onCamera ? '0%' : '5%'}>
+            {onCamera && (
+              <Fab
+                placement="top-left"
+                onPress={() => {
+                  navigation.goBack();
+                }}
+                icon={<ArrowBackIcon size={6} color="white" />}
+                size={10}
+              />
+            )}
+
+            {hasScroll ? (
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {children}
+              </ScrollView>
+            ) : (
+              <View flex={1}>{children}</View>
+            )}
+          </Box>
+        </Box>
+      )}
+      {errorMessage !== null && errorMessage !== undefined && (
         <HStack position="absolute" w="100%">
           <Alert status="error" w="100%">
             <Alert.Icon />
-            <Alert.Title flexShrink={1}>{props.errorMessage}</Alert.Title>
+            <Alert.Title flexShrink={1}>{errorMessage}</Alert.Title>
           </Alert>
         </HStack>
       )}
-      {props.isLoading && (
+      {isLoading && (
         <Box position="absolute" w="100%" h="100%" bg="black" opacity={0.8}>
           <Center flex={1}>
             <Spinner accessibilityLabel="Loading posts" />
@@ -78,5 +148,12 @@ const Screen = props => {
     </NativeBaseProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
 
 export default Screen;

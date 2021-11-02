@@ -4,13 +4,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getAuthorizationHeader = () =>
   new Promise(async resolve => {
-    const accessToken = await AsyncStorage.getItem('token');
-    if (accessToken) {
-      resolve('Bearer ' + accessToken);
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      resolve('Bearer ' + token);
     } else {
       resolve(null);
     }
   });
+
+const checkFirstVisit = async () => {
+  const visited = await AsyncStorage.getItem('visited');
+  if (visited) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 export const CreateAxios = () =>
   new Promise(resolve => {
@@ -31,6 +40,21 @@ export const CreateAxios = () =>
         },
         error => {
           throw {boundaryId: 'FETCH_REQUEST', details: error};
+        },
+      );
+
+      axios.interceptors.response.use(
+        response => {
+          if (!response.data) {
+            throw {boundaryId: 'reachResponse', details: response};
+          } else {
+            return response;
+          }
+        },
+        error => {
+          if (error.response ? error.response.status === 401 : false) {
+            return {message: 'Unauthorized credential'};
+          }
         },
       );
       resolve(axios);

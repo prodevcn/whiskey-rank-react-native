@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Provider} from 'react-redux';
-import {Platform, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {NativeBaseProvider} from 'native-base';
 
@@ -15,7 +15,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <NativeBaseProvider>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+        <StatusBar barStyle="dark-content" />
         <AppNavigation />
       </NativeBaseProvider>
     </Provider>

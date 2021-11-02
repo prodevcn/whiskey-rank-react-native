@@ -11,9 +11,10 @@ import {
 } from 'native-base';
 import {StatusBar, StyleSheet, Dimensions} from 'react-native';
 
-import ChevronsRight from '../../../assets/images/svg/chevrons-right.svg';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/core';
+
+import Screen from '../../layouts/Screen';
 
 const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -50,22 +51,15 @@ const LandingScreen = props => {
 
   return (
     <NativeBaseProvider config={config}>
-      <Box
-        flex={1}
-        alignItems="center"
-        bg={{
-          linearGradient: {
-            colors: ['orange.400', 'amber.300'],
-            start: [0, 0],
-            end: [0, 1],
-          },
-        }}>
-        <Image
-          style={styles.logo}
-          source={require('../../../assets/images/logo.png')}
-          mt={20}
-          alt="logo"
-        />
+      <Screen gradient fullScreen>
+        <HStack justifyContent="center">
+          <Image
+            style={styles.logo}
+            source={require('../../../assets/images/logo.png')}
+            mt={20}
+            alt="logo"
+          />
+        </HStack>
         <VStack
           justifyContent="space-around"
           flex={1}
@@ -93,7 +87,6 @@ const LandingScreen = props => {
               <Text fontSize={14} color="primary.400">
                 Please tab to continue
               </Text>
-              <ChevronsRight with={14} height={14} color="#22d3ee" />
             </HStack>
           </Pressable>
           <Image
@@ -102,7 +95,7 @@ const LandingScreen = props => {
             alt="logo"
           />
         </VStack>
-      </Box>
+      </Screen>
     </NativeBaseProvider>
   );
 };
