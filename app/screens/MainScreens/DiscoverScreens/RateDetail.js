@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useRef, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -15,11 +16,13 @@ import {
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Screen from '../../../layouts/Screen';
 
+import {IMAGE_URL} from '../../../constants/config';
 import Upload from '../../../../assets/images/svg/upload.svg';
 import ImageIcon from '../../../../assets/images/svg/image.svg';
 import ChevronRight from '../../../../assets/images/svg/chevron-right.svg';
 
 const RateDetail = props => {
+  const {data} = props;
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const ref = useRef('rate-slider');
@@ -43,6 +46,10 @@ const RateDetail = props => {
     setScroll(false);
   };
 
+  useEffect(() => {
+    console.log(props.route.params.image_url);
+  }, []);
+
   return (
     <Screen
       hasHeader
@@ -58,15 +65,15 @@ const RateDetail = props => {
                 size="sm"
                 alt="whisky image"
                 source={{
-                  uri: 'https://raw.githubusercontent.com/WhiskeyProject/whiskey-api/master/list_whiskies/100.jpg',
+                  uri: IMAGE_URL + props.route.params.image_url,
                 }}
               />
               <VStack space={2} flex={4}>
                 <Heading size="xs" color="black">
-                  Weihenstephaner Hefeweissbier
+                  {props.route.params.brand}
                 </Heading>
                 <Text color="gray.400" fontSize={12} w="100%">
-                  Bayerische Staatsbrauerei Weihenstephan
+                  {props.route.params.name}
                 </Text>
               </VStack>
             </HStack>

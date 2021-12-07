@@ -6,19 +6,31 @@ const getAuthorizationHeader = () =>
   new Promise(async resolve => {
     const token = await AsyncStorage.getItem('token');
     if (token) {
-      resolve('Bearer ' + token);
+      resolve(token);
     } else {
       resolve(null);
     }
   });
 
-const checkFirstVisit = async () => {
-  const visited = await AsyncStorage.getItem('visited');
+export const checkFirstVisit = () => {
+  const visited = AsyncStorage.getItem('visited');
   if (visited) {
-    return true;
-  } else {
     return false;
+  } else {
+    return true;
   }
+};
+
+export const formatRate = value => {
+  return Number(value).toFixed(2) + ' Avg';
+};
+
+export const formatNumberForEvery3Digit = value => {
+  if (!value) {
+    return '';
+  }
+  const pattern = /(\d)(?=(\d\d\d)+(?!\d))/g; // Separate variable every for 3 digits with comma
+  return String(value).replace(pattern, '$1,');
 };
 
 export const CreateAxios = () =>
@@ -53,6 +65,7 @@ export const CreateAxios = () =>
         },
         error => {
           if (error.response ? error.response.status === 401 : false) {
+            console.log('[ERROR]:[UNAUTHORIZED_CREDENTIAL]');
             return {message: 'Unauthorized credential'};
           }
         },

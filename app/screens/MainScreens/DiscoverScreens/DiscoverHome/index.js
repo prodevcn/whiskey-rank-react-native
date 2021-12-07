@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useRef, useEffect} from 'react';
 import _ from 'lodash';
 import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, Dimensions} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+// import {useNavigation} from '@react-navigation/native';
 import {
   Pressable,
   Box,
@@ -12,25 +13,42 @@ import {
   ScrollView,
   Icon,
   VStack,
-  Text,
 } from 'native-base';
 import {RNCamera} from 'react-native-camera';
 
 import {getAllProducts} from '../../../../redux/actions/productAction';
 
 import Screen from '../../../../layouts/Screen';
-import Scan from '../../../../../assets/images/svg/maximize.svg';
+import ProductItem from '../../../../components/ProductItem';
+import PageController from '../../../../components/PageController';
+
+// import Scan from '../../../../../assets/images/svg/maximize.svg';
 import Search from '../../../../../assets/images/svg/discover.svg';
+import Remove from '../../../../../assets/images/svg/x-circle.svg';
 
 const DiscoverHome = props => {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const dispatch = useDispatch();
+  const {products} = useSelector(state => state.product);
   const ref = useRef();
   const [onCamera, setCamera] = useState(false);
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
+    dispatch(getAllProducts({page, perPage, search}));
     console.log('[SCREEN]:[UPDATED]');
-  });
+  }, []);
+
+  useEffect(() => {
+    dispatch(getAllProducts({page: 0, perPage: perPage, search: search}));
+    console.log('');
+  }, [search, perPage]);
+
+  useEffect(() => {
+    dispatch(getAllProducts({page, perPage, search}));
+  }, [page]);
 
   return (
     <Screen
@@ -74,14 +92,32 @@ const DiscoverHome = props => {
               justifyContent="space-between">
               <Input
                 placeholder="Whiskey, breweries, or venues"
+                value={search}
+                onChangeText={text => {
+                  setSearch(text);
+                }}
                 InputLeftElement={
-                  <Pressable>
+                  <Pressable onPress>
                     <Icon
                       as={<Search width={20} height={20} color="black" />}
                       size={5}
-                      ml="3"
+                      ml={3}
                     />
                   </Pressable>
+                }
+                InputRightElement={
+                  search !== '' && (
+                    <Pressable
+                      onPress={() => {
+                        setSearch('');
+                      }}>
+                      <Icon
+                        as={<Remove width={20} height={20} color="black" />}
+                        size={5}
+                        mr={3}
+                      />
+                    </Pressable>
+                  )
                 }
                 size="sm"
                 flex={1}
@@ -104,24 +140,28 @@ const DiscoverHome = props => {
             </HStack>
           </Box>
           <Box flex={1}>
-            <ScrollView showsVerticalScrollIndicator={false} px="5%" pt={3}>
-              {_.range(10).map(index => (
-                <Box
-                  key={index}
-                  backgroundColor="rgba(0, 0, 0, 0.2)"
-                  p={3}
-                  rounded="lg"
-                  mb={5}>
-                  <HStack justifyContent="space-between">
-                    <Text>{index}</Text>
-                    <Pressable
-                      onPress={() => {
-                        navigation.navigate('rate-detail');
-                      }}>
-                      <Text>Show detail</Text>
-                    </Pressable>
-                  </HStack>
-                </Box>
+            <PageController
+              page={page}
+              perPage={perPage}
+              onNext={() => {
+                setPage(prev => prev + 1);
+              }}
+              onPrev={() => {
+                setPage(prev => prev - 1);
+              }}
+              onChangePerPage={count => {
+                setPerPage(Number(count));
+              }}
+              disableNextPageBtn={products.length === perPage ? false : true}
+            />
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              px="5%"
+              flex={1}
+              pt={3}
+              mb={3}>
+              {products.map((product, index) => (
+                <ProductItem key={product.id} data={product} />
               ))}
             </ScrollView>
           </Box>

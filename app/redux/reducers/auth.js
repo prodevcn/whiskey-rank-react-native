@@ -3,7 +3,7 @@ import {AUTH, LOGOUT} from '../../constants/actions';
 const INITIAL_STATE = {
   fetching: false,
   authenticated: false,
-  firstVisited: false,
+  visited: false,
   errorMessage: null,
 };
 
@@ -27,6 +27,11 @@ const authReducer = (state = INITIAL_STATE, action) => {
         fetching: false,
         authenticated: true,
         errorMessage: null,
+      };
+    case 'SET_VISIT':
+      return {
+        ...state,
+        visited: true,
       };
     case LOGOUT:
       return {

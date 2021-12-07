@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
-  const {authenticated, firstVisited} = useSelector(state => state.auth);
+  const {authenticated} = useSelector(state => state.auth);
   const headerOption = {
     headerShown: false,
   };
@@ -27,7 +27,7 @@ const AppRoutes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {checkFirstVisit && (
+        {checkFirstVisit() && (
           <Stack.Screen
             name="landing"
             component={LandingScreen}

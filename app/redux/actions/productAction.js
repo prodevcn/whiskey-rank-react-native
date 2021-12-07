@@ -5,15 +5,23 @@ export const getAllProducts = data => dispatch => {
   dispatch({type: FETCH_PRODUCTS.REQUEST});
   return CreateAxios().then(axios =>
     axios
-      .get('/product/all')
-      .then(async res => {
+      .post('/product/all', {
+        perPage: data.perPage,
+        page: data.page,
+        search: data.search,
+      })
+      .then(res => {
         if (res.data) {
           console.log('[SUCCESS]:[GET_ALL_PRODUCTS]');
-          dispatch({type: FETCH_PRODUCTS.SUCCESS, payload: res.data});
+          dispatch({
+            type: FETCH_PRODUCTS.SUCCESS,
+            payload: res.data.data.products,
+          });
+          return res.data.products;
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log('[ERROR]:[FETCH_PRODUCTS]', err);
       }),
   );
 };
